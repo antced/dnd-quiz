@@ -1,57 +1,61 @@
 var quiz = [{
-    question: "What color is the sky?",
+    question: "What does AC stand for?",
     answers: {
-        one: "Red",
-        two: "Green",
-        three: "Blue",
-        four: "Yellow"
+        one: "1. Actual Class",
+        two: "2. Arcane Club",
+        three: "3. Armor Class",
+        four: "4. Amount of Coins"
     },
-    rightAnswer: "Blue",
+    rightAnswer: "3. Armor Class",
 }, {
-    question: "What is 2+2?",
+    question: "What number is rolled for a critical hit?",
     answers: {
-        one: "4",
-        two: "6",
-        three: "2",
-        four: "10.5"
+        one: "1. 100",
+        two: "2. 20",
+        three: "3. 50",
+        four: "4. 999"
     },
-    rightAnswer: "4",
+    rightAnswer: "2. 20",
 }, {
-    question: "What data type equates to true/false?",
+    question: "Who invented Dungeons and Dragons?",
     answers: {
-        one: "String",
-        two: "Boolean",
-        three: "Number",
-        four: "Function"
+        one: "1. Gary Gygax",
+        two: "2. Bob Barker",
+        three: "3. Peter Mayhew",
+        four: "4. Steve Jobs"
     },
-    rightAnswer: "Boolean",
+    rightAnswer: "1. Gary Gygax",
 }, {
-    question: "How many answer choices does this question have?",
+    question: "What ability determines your perception?",
     answers: {
-        one: "One",
-        two: "Five",
-        three: "Three",
-        four: "Four"
+        one: "1. Intelligence",
+        two: "2. Charisma",
+        three: "3. Wisdom",
+        four: "4. Strength"
     },
-    rightAnswer: "Four",
+    rightAnswer: "3. Wisdom",
 }, {
-    question: "Is this the last question?",
+    question: "What level introduces subclasses?",
     answers: {
-        one: "No",
-        two: "Maybe",
-        three: "I don't know",
-        four: "Yes, because there are only five questions."
+        one: "1. 10",
+        two: "2. 99",
+        three: "3. 4",
+        four: "4. 3"
     },
-    rightAnswer: "Yes, because there are only five questions.",
+    rightAnswer: "4. 3",
 }
 ];
-
+// initial local storage array
+var scoreArr = [];
+// setting elements up globally
 var buttonDiv = document.getElementById("buttonDiv");
 var buttonArr = buttonDiv.getElementsByTagName("button");
 var question = document.getElementById("questionText");
 var result = document.createElement("p");
 var scoreBox = document.getElementById("highscoreBox");
-
+var initialsInput = document.getElementById("initials");
+var submitButton = document.getElementById("submit");
+// counters
 var questionNumber = 0;
 var time = 60;
 
@@ -80,12 +84,12 @@ function setTimer() {
             time = 0;
             document.getElementById("timer").textContent = "Timer: " + time;
             clearInterval(timerInterval);
-            setHighScore();
+            gameOver();
         } else if (time <= 0 || questionNumber === 5) {
             // time = 0;
             document.getElementById("timer").textContent = "Timer: " + time;
             clearInterval(timerInterval);
-            setHighScore();
+            inputScore();
         }
 
     }, 1000);
@@ -93,14 +97,13 @@ function setTimer() {
 
 
 function setQuiz() {
+    // localStorage.getItem(JSON.parse("scores"))
+    // remove title
+    document.getElementById("title").remove();
     // remove start button
-    var startBtn = document.getElementById("startBtn");
-    startBtn.remove();
-
+    document.getElementById("startBtn").remove();
     // remove paragraph text
-    var directions = document.getElementById("directions");
-    directions.remove();
-
+    document.getElementById("directions").remove();
     // create 4 buttons
     var newBtn = document.createElement("button");
     document.getElementById("buttonDiv").appendChild(newBtn);
@@ -110,7 +113,6 @@ function setQuiz() {
     document.getElementById("buttonDiv").appendChild(newBtn);
     var newBtn = document.createElement("button");
     document.getElementById("buttonDiv").appendChild(newBtn);
-
     // assign ids to all buttons
     buttonArr[0].setAttribute("id", "button-1")
     buttonArr[1].setAttribute("id", "button-2")
@@ -121,7 +123,6 @@ function setQuiz() {
 }
 
 function takeQuiz() {
-
     if (questionNumber < quiz.length) {
         // rename the h1 to question name
         question.textContent = quiz[questionNumber].question;
@@ -136,10 +137,7 @@ function takeQuiz() {
         buttonArr[1].addEventListener("click", checkAnswer)
         buttonArr[2].addEventListener("click", checkAnswer)
         buttonArr[3].addEventListener("click", checkAnswer)
-    } else {
-        console.log("gameover");
     }
-
 }
 
 function checkAnswer(event) {
@@ -149,27 +147,92 @@ function checkAnswer(event) {
     // checking if clicked button is correct or not
     var clickedBtn = document.getElementById(event.target.id);
     if (clickedBtn.textContent === quiz[questionNumber].rightAnswer) {
+        // making text appear below buttons to say if right or wrong
+        document.getElementById("answerStatus").style.borderTop = "1px solid green"
         document.getElementById("answerStatus").appendChild(result);
+        // changing color based on answer
         result.textContent = "Correct!"
+        result.style.color = "green"
         questionNumber++;
         takeQuiz();
     } else {
+        document.getElementById("answerStatus").style.borderTop = "1px solid red"
         document.getElementById("answerStatus").appendChild(result);
         result.textContent = "Incorrect"
+        result.style.color = "red"
         questionNumber++
-        time-=15
+        time -= 15
         takeQuiz();
     }
 }
 
-function setHighScore() {
+function inputScore() {
     var highScore = document.getElementById("questionText");
+    highScore.style.textAlign = "center";
     highScore.textContent = "All done!";
     // remove button div
     buttonDiv.remove();
     // turn answerstatus into set your high score
-    result.textContent = "Set your high score."
-    // popular highscorebox
-    var scoreForm = document.createElement("form");
-    scoreBox.appendChild(scoreForm);
+    document.getElementById("answerStatus").style.borderTop = "0px"
+    result.style.color = "white"
+    result.textContent = "Your final score is " + time;
+    // reveal highscorebox
+    scoreBox.style.visibility = "visible";
+    submitButton.addEventListener("click", saveScore);
 }
+
+function gameOver() {
+    var highScore = document.getElementById("questionText");
+    highScore.style.textAlign = "center";
+    highScore.textContent = "You ran out of time!";
+    // remove button div
+    buttonDiv.remove();
+    // turn answerstatus into set your high score
+    document.getElementById("answerStatus").style.borderTop = "0px"
+    result.style.color = "white"
+    result.textContent = "Click here to start over.";
+    // reveal highscorebox
+    result.addEventListener("click", refreshPage);
+}
+
+function refreshPage() {
+    location.reload();
+}
+
+function saveScore() {
+    // get form input text
+    if (localStorage.getItem("score")) {
+        var oldScore = localStorage.getItem("score");
+        oldScore = JSON.parse(oldScore);
+        var newScore = {
+            name: initialsInput.value,
+            score: time
+        }
+        oldScore.push(newScore);
+        localStorage.setItem("score", JSON.stringify(oldScore));
+        showScores();
+    } else {
+        var newScore = {
+            name: initialsInput.value,
+            score: time
+        }
+        scoreArr.push(newScore);
+        localStorage.setItem("score", JSON.stringify(scoreArr));
+        showScores();
+    }
+}
+
+// function showScores() {
+//     if (localStorage.getItem("score")) {
+//     var oldScore = localStorage.getItem("score");
+//     oldScore = JSON.parse(oldScore);
+//     oldScore = oldScore.sort((a, b) => a.score - b.score);
+//     console.log(oldScore);
+//     var scoreList = document.getElementById("list");
+//     console.log(scoreList)
+//     // populate highscores list in reverse order, i = oldScore.length; i > 0; i--;
+//     // do a for loop for creating a list item for each score
+//     } else {
+//         console.log("theres no scores")
+//     }
+// }

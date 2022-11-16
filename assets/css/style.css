@@ -1,0 +1,93 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: black;
+    color: white;
+}
+
+header {
+    background-color: darkred;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+header a {
+    font-size: 150%;
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 200%;
+}
+
+section {
+    padding-top: 20px;
+    background-color: black;
+    text-align: center;
+}
+
+p {
+    font-size: 120%;
+    margin: 0 0 20px 0;
+}
+
+#questionText {
+    text-align: left;
+    margin: 0 auto 20px auto;
+    width: 30%;
+}
+
+button {
+    font-size: 120%;
+    padding: 10px;
+    border-style: none;
+    border-radius: 10px;
+    border-color: gray;
+    background-color: darkred;
+    color: white;
+    margin-bottom: 5px;
+}
+
+
+#buttonDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 auto 20px auto;
+    width: 30%;
+}
+
+#answerStatus {
+    margin: auto;
+    width: 30%;
+}
+
+label {
+    font-size: 120%;
+}
+
+input {
+    font-size: 120%;
+    margin-bottom: 20px;
+}
+
+/* highscore page css */
+a {
+    text-decoration: none;
+}
+
+ol {
+    margin: 0 auto 20px auto;
+    width: 50%;
+    text-align: left;
+}
+
+li {
+    background-color: rgb(36, 36, 36);
+    font-size: 120%;
+}
