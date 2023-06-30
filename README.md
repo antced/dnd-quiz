@@ -4,7 +4,7 @@
 
 ## Description
 
-https://antced.github.io/code-quiz/
+https://antced.github.io/dnd-quiz/
 
 JavaScript based Dungeons & Dragons quiz that includes the following features:
 
